@@ -89,7 +89,7 @@
   };
 </script>
 
-<div class="flex flex-col sm:flex-row w-full h-full p-4 gap-2 overflow-hidden">
+<div class="flex flex-col sm:flex-row w-full h-full p-4 gap-4 overflow-hidden">
   <div class="flex flex-col gap-2 overflow-y-auto">
     <div class="flex flex-col">
       <label for="imageFile">Bild</label>
