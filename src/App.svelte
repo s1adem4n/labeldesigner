@@ -89,8 +89,8 @@
   };
 </script>
 
-<div class="flex flex-col sm:flex-row w-full h-full p-4 gap-4 overflow-hidden">
-  <div class="flex flex-col gap-2 overflow-y-auto">
+<div class="flex w-full h-full p-4 gap-4 overflow-hidden">
+  <div class="flex flex-col gap-2 overflow-y-auto w-full sm:w-auto">
     <div class="flex flex-col">
       <label for="imageFile">Bild</label>
       <input
@@ -153,13 +153,22 @@
         bind:value={props.margin}
       />
     </div>
+
+    <a href={pdfResult} download="result.pdf">
+      <button
+        class="py-1 px-2 w-full text-white bg-blue-500 rounded-md hover:bg-blue-600"
+        disabled={!pdfResult}
+      >
+        Download
+      </button>
+    </a>
   </div>
-  <hr class="rounded-full w-full sm:w-px sm:h-full bg-gray-200" />
+  <hr class="rounded-full h-full w-px hidden sm:inline bg-gray-200" />
 
   <embed
     src={pdfResult}
     type="application/pdf"
-    class="w-full h-full rounded-md"
+    class="w-full h-full rounded-md hidden sm:inline"
   />
 </div>
 
