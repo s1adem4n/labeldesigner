@@ -156,7 +156,7 @@
 
     <a href={pdfResult} download="result.pdf">
       <button
-        class="py-1 px-2 w-full text-white bg-blue-500 rounded-md hover:bg-blue-600"
+        class="py-1 px-2 w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 border border-blue-400 hover:border-blue-500"
         disabled={!pdfResult}
       >
         Download
