@@ -159,17 +159,25 @@
         class="py-1 px-2 w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 border border-blue-400 hover:border-blue-500"
         disabled={!pdfResult}
       >
-        Download
+        Speichern
       </button>
     </a>
   </div>
   <hr class="rounded-full h-full w-px hidden sm:inline bg-gray-200" />
 
-  <embed
-    src={pdfResult}
-    type="application/pdf"
-    class="w-full h-full rounded-md hidden sm:inline"
-  />
+  {#if pdfResult}
+    <embed
+      src={pdfResult}
+      type="application/pdf"
+      class="w-full h-full rounded-md hidden sm:inline"
+    />
+  {:else}
+    <div
+      class="flex flex-col items-center justify-center w-full h-full rounded-md bg-gray-100"
+    >
+      <p class="text-gray-400">Kein Bild ausgewählt</p>
+    </div>
+  {/if}
 </div>
 
 <style lang="postcss">
