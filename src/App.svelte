@@ -145,7 +145,7 @@
     </div>
 
     <div class="flex flex-col">
-      <label for="margin">Rand</label>
+      <label for="margin">Abstand (Rand)</label>
       <input
         id="margin"
         type="number"
