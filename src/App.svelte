@@ -40,7 +40,7 @@
     });
     const img = new Image();
     img.src = URL.createObjectURL(image);
-    // await img loaded
+
     await new Promise((resolve) => {
       img.onload = resolve;
     });
