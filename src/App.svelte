@@ -1,5 +1,14 @@
 <script lang="ts">
   import { jsPDF } from "jspdf";
+  import * as pdfjsLib from "pdfjs-dist";
+  import * as pdfjsWorker from "pdfjs-dist/build/pdf.worker.min.mjs";
+  import { onDestroy, onMount } from "svelte";
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+  const worker = new pdfjsLib.PDFWorker();
+  onDestroy(() => {
+    worker.destroy();
+  });
 
   interface Props {
     height: number;
@@ -19,7 +28,36 @@
     image: null,
   };
 
+  let pdfCanvas: HTMLCanvasElement;
+
+  let ctx: CanvasRenderingContext2D;
+
+  onMount(() => {
+    ctx = pdfCanvas.getContext("2d")!;
+  });
+
+  const renderPage = async (page: pdfjsLib.PDFPageProxy) => {
+    const viewport = page.getViewport({ scale: 1 });
+    pdfCanvas.height = viewport.height;
+    pdfCanvas.width = viewport.width;
+
+    await page.render({
+      canvasContext: ctx,
+      viewport,
+    }).promise;
+  };
+
   $: generatePdf(props);
+  $: if (pdfResult) {
+    pdfjsLib
+      .getDocument({
+        url: pdfResult,
+        worker,
+      })
+      .promise.then((pdf) => {
+        pdf.getPage(1).then(renderPage);
+      });
+  }
 
   let pdfResult: string | null = null;
 
@@ -163,21 +201,20 @@
       </button>
     </a>
   </div>
-  <hr class="rounded-full h-full w-px hidden sm:inline bg-gray-200" />
+  <hr class="rounded-full h-full w-px hidden sm:inline bg-gray-300" />
 
-  {#if pdfResult}
-    <embed
-      src={pdfResult}
-      type="application/pdf"
-      class="w-full h-full rounded-md hidden sm:inline"
-    />
-  {:else}
-    <div
-      class="flex flex-col items-center justify-center w-full h-full rounded-md bg-gray-100"
-    >
-      <p class="text-gray-400">Kein Bild ausgewählt</p>
-    </div>
-  {/if}
+  <canvas
+    id="pdfCanvas"
+    class="mx-auto border border-gray-300 rounded-md"
+    style="display: {pdfResult ? 'block' : 'none'};"
+    bind:this={pdfCanvas}
+  />
+  <div
+    class="flex-col items-center justify-center w-full h-full rounded-md bg-gray-100"
+    style="display: {!pdfResult ? 'flex' : 'none'};"
+  >
+    <p class="text-gray-400">Kein Bild ausgewählt</p>
+  </div>
 </div>
 
 <style lang="postcss">
