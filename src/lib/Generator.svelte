@@ -74,7 +74,7 @@
   };
 
   $: generatePdf(props);
-  $: if (pdfResult) {
+  $: if (pdfResult && pdfPageCurrent) {
     renderPdf(pdfResult);
   }
 
@@ -118,7 +118,8 @@
     };
 
     for (let i = 0; i < count; i++) {
-      pdf.addImage(img, "JPEG", pos.x, pos.y, size.width, size.height);
+      console.log(i);
+      pdf.addImage(img, pos.x, pos.y, size.width, size.height);
       pos.x += size.width + gap;
       if (pos.x + size.width >= pdf.internal.pageSize.getWidth() - margin) {
         pos.x = props.margin;
@@ -126,6 +127,7 @@
       }
       if (pos.y + size.height >= pdf.internal.pageSize.getHeight() - margin) {
         pdf.addPage();
+
         pos.x = margin;
         pos.y = margin;
       }
