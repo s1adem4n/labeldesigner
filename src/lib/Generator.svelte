@@ -4,6 +4,23 @@
   import * as pdfjsWorker from "pdfjs-dist/build/pdf.worker.min.mjs";
   import { onDestroy, onMount } from "svelte";
 
+  function dataURItoBlob(dataURI: string): Blob {
+    const base64String = dataURI.split(",")[1];
+    const byteString = atob(base64String);
+
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([ab], { type: mimeString });
+    return blob;
+  }
+
   pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
   const worker = new pdfjsLib.PDFWorker();
   onDestroy(() => {
@@ -120,6 +137,17 @@
 
     pdfResult = pdf.output("datauristring");
   };
+
+  const downloadPdfResult = () => {
+    if (pdfResult) {
+      const blob = dataURItoBlob(pdfResult);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "result.pdf";
+      a.click();
+    }
+  };
 </script>
 
 <div
@@ -175,15 +203,13 @@
     />
   </div>
 
-  <a href={pdfResult} download="result.pdf" class="rounded-md overflow-hidden">
-    <button
-      class="py-1 px-2 w-full text-white bg-blue-500 hover:bg-blue-600 border border-blue-400 hover:border-blue-500"
-      disabled={!pdfResult}
-      tabindex="-1"
-    >
-      Speichern
-    </button>
-  </a>
+  <button
+    class="py-1 rounded-md px-2 w-full text-white bg-blue-500 hover:bg-blue-600 border border-blue-400 hover:border-blue-500"
+    disabled={!pdfResult}
+    on:click={downloadPdfResult}
+  >
+    Speichern
+  </button>
 </div>
 
 <div class="flex flex-col w-full h-full gap-2">

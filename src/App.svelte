@@ -5,10 +5,10 @@
   let image: File | null = null;
 </script>
 
-<div class="flex flex-col md:flex-row w-full min-h-full p-4 gap-4">
-  {#if image}
+{#if image}
+  <div class="flex flex-col md:flex-row w-full min-h-full md:h-full p-4 gap-4">
     <Generator {image} />
-  {:else}
-    <FileInput bind:input={image} />
-  {/if}
-</div>
+  </div>
+{:else}
+  <FileInput bind:input={image} />
+{/if}
