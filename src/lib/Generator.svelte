@@ -119,7 +119,15 @@
 
     for (let i = 0; i < count; i++) {
       console.log(i);
-      pdf.addImage(img, pos.x, pos.y, size.width, size.height);
+      pdf.addImage(
+        img,
+        pos.x,
+        pos.y,
+        size.width,
+        size.height,
+        undefined,
+        "FAST"
+      );
       pos.x += size.width + gap;
       if (pos.x + size.width >= pdf.internal.pageSize.getWidth() - margin) {
         pos.x = props.margin;
