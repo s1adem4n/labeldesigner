@@ -118,7 +118,6 @@
     };
 
     for (let i = 0; i < count; i++) {
-      console.log(i);
       pdf.addImage(
         img,
         pos.x,
