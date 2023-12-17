@@ -17,7 +17,7 @@
 </script>
 
 <button
-  class="flex w-full h-full justify-center items-center bg-gray-100 rounded-xl border-4 border-gray-300 border-dashed"
+  class="flex w-full min-h-full justify-center items-center bg-gray-100 rounded-xl border-4 border-gray-300 border-dashed"
   on:drop={drop}
   on:dragover={(e) => {
     e.preventDefault();

@@ -5,7 +5,7 @@
   let image: File | null = null;
 </script>
 
-<div class="flex w-full h-full p-4 gap-4 overflow-hidden">
+<div class="flex flex-col md:flex-row w-full min-h-full p-4 gap-4">
   {#if image}
     <Generator {image} />
   {:else}
