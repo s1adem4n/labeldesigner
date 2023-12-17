@@ -48,7 +48,7 @@
   let pdfCanvas: HTMLCanvasElement;
   let pdfPagesCount: number;
   let pdfPageCurrent: number = 1;
-  let rendering = false;
+  let renderPromise: Promise<void> = Promise.resolve();
 
   let ctx: CanvasRenderingContext2D;
 
@@ -56,37 +56,28 @@
     ctx = pdfCanvas.getContext("2d")!;
   });
 
-  const renderPage = async (page: pdfjsLib.PDFPageProxy) => {
+  const renderPdf = async (src: string) => {
+    await renderPromise;
+    const pdf = await pdfjsLib.getDocument(src).promise;
+    pdfPagesCount = pdf.numPages;
+    if (pdfPageCurrent > pdfPagesCount) {
+      pdfPageCurrent = pdfPagesCount;
+    }
+    const page = await pdf.getPage(pdfPageCurrent);
+
     const viewport = page.getViewport({ scale: 1 });
     pdfCanvas.height = viewport.height;
     pdfCanvas.width = viewport.width;
 
-    return page.render({
+    renderPromise = page.render({
       canvasContext: ctx,
       viewport,
     }).promise;
   };
 
   $: generatePdf(props);
-  $: if (pdfResult && !rendering) {
-    rendering = true;
-    pdfjsLib
-      .getDocument({
-        url: pdfResult,
-        worker,
-      })
-      .promise.then((pdf) => {
-        pdfPagesCount = pdf.numPages;
-        if (pdfPageCurrent > pdfPagesCount) {
-          pdfPageCurrent = 1;
-        }
-        pdf
-          .getPage(pdfPageCurrent)
-          .then(renderPage)
-          .then(() => {
-            rendering = false;
-          });
-      });
+  $: if (pdfResult) {
+    renderPdf(pdfResult);
   }
 
   let pdfResult: string | null = null;
