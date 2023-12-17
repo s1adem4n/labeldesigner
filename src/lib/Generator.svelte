@@ -133,7 +133,10 @@
         pos.x = props.margin;
         pos.y += size.height + gap;
       }
-      if (pos.y + size.height >= pdf.internal.pageSize.getHeight() - margin) {
+      if (
+        pos.y + size.height >= pdf.internal.pageSize.getHeight() - margin &&
+        i < count - 1
+      ) {
         pdf.addPage();
 
         pos.x = margin;
