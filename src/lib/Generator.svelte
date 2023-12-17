@@ -48,7 +48,6 @@
   let pdfCanvas: HTMLCanvasElement;
   let pdfPagesCount: number;
   let pdfPageCurrent: number = 1;
-  let renderPromise: Promise<void> = Promise.resolve();
 
   let ctx: CanvasRenderingContext2D;
 
@@ -57,7 +56,6 @@
   });
 
   const renderPdf = async (src: string) => {
-    await renderPromise;
     const pdf = await pdfjsLib.getDocument(src).promise;
     pdfPagesCount = pdf.numPages;
     if (pdfPageCurrent > pdfPagesCount) {
@@ -69,7 +67,7 @@
     pdfCanvas.height = viewport.height;
     pdfCanvas.width = viewport.width;
 
-    renderPromise = page.render({
+    page.render({
       canvasContext: ctx,
       viewport,
     }).promise;
