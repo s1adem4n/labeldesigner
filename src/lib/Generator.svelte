@@ -48,6 +48,7 @@
   let pdfCanvas: HTMLCanvasElement;
   let pdfPagesCount: number;
   let pdfPageCurrent: number = 1;
+  let rendering = false;
 
   let ctx: CanvasRenderingContext2D;
 
@@ -60,14 +61,15 @@
     pdfCanvas.height = viewport.height;
     pdfCanvas.width = viewport.width;
 
-    await page.render({
+    return page.render({
       canvasContext: ctx,
       viewport,
     }).promise;
   };
 
   $: generatePdf(props);
-  $: if (pdfResult) {
+  $: if (pdfResult && !rendering) {
+    rendering = true;
     pdfjsLib
       .getDocument({
         url: pdfResult,
@@ -78,7 +80,12 @@
         if (pdfPageCurrent > pdfPagesCount) {
           pdfPageCurrent = 1;
         }
-        pdf.getPage(pdfPageCurrent).then(renderPage);
+        pdf
+          .getPage(pdfPageCurrent)
+          .then(renderPage)
+          .then(() => {
+            rendering = false;
+          });
       });
   }
 
