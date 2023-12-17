@@ -6,12 +6,10 @@
     e.preventDefault();
     const file = e.dataTransfer?.files[0];
     // check if file is an image
-    if (file) {
-      if (file.type.startsWith("image")) {
-        input = file;
-      } else {
-        alert("Bitte wähle ein Bild aus");
-      }
+    if (file && file.type.startsWith("image")) {
+      input = file;
+    } else {
+      alert("Bitte wähle ein Bild aus");
     }
   };
 </script>
