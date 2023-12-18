@@ -240,7 +240,7 @@
   </div>
   <canvas
     id="pdfCanvas"
-    class="mx-auto border border-gray-300 rounded-md h-full w-auto"
+    class="mx-auto border border-gray-300 rounded-md w-full h-auto md:w-auto md:h-full"
     bind:this={pdfCanvas}
   />
 </div>
